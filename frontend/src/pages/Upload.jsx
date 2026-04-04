@@ -9,30 +9,35 @@ function Upload() {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
   if (!file || !purpose || !date) {
     alert("Fill all fields");
     return;
   }
 
-  const newExpense = {
-    merchant: file.name,
-    amount: "$50",
-    date,
-    status: "Flagged",
-    reason: "Pending audit"
-  };
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("purpose", purpose);
+    formData.append("date", date);
 
-  // 🔥 Get existing data
-  const existing = JSON.parse(localStorage.getItem("expenses")) || [];
+    const res = await fetch("http://127.0.0.1:8000/audit", {
+      method: "POST",
+      body: formData
+    });
 
-  // 🔥 Add new expense
-  const updated = [newExpense, ...existing];
+    const result = await res.json();
 
-  // 🔥 Save back
-  localStorage.setItem("expenses", JSON.stringify(updated));
+    const existing = JSON.parse(localStorage.getItem("expenses")) || [];
+    const updated = [result, ...existing];
 
-  navigate("/dashboard");
+    localStorage.setItem("expenses", JSON.stringify(updated));
+
+    navigate("/dashboard");
+  } catch (error) {
+    console.error(error);
+    alert("Error connecting to backend");
+  }
 };
   return (
     <div style={{ padding: "20px" }}>

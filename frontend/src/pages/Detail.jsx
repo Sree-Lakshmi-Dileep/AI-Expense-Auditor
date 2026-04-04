@@ -7,13 +7,11 @@ function Detail() {
 
   return (
     <div style={styles.container}>
-      {/* LEFT */}
       <div style={styles.left}>
         <h3> Receipt</h3>
         <p>{state.merchant}</p>
       </div>
 
-      {/* RIGHT */}
       <div style={styles.right}>
         <h3> Audit Result</h3>
         <p><strong>Amount:</strong> {state.amount}</p>

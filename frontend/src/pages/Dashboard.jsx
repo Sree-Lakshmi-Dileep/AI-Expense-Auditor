@@ -8,7 +8,6 @@ function Dashboard() {
     const stored = JSON.parse(localStorage.getItem("expenses"));
 
     if (!stored || stored.length === 0) {
-      // 🔥 Insert dummy data first time
       const dummyExpenses = [
         {
           merchant: "KFC",

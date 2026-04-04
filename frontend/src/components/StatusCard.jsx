@@ -38,7 +38,7 @@ const styles = {
     marginBottom: "15px",
     borderRadius: "10px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
-    cursor: "pointer", // 🔥 important
+    cursor: "pointer", 
     transition: "0.2s"
   },
   header: {
