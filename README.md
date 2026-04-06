@@ -1,70 +1,46 @@
-# Getting Started with Create React App
+# Policy-First Expense Auditor (Frontend Demo)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## The Problem
+Corporate finance teams manually audit every employee expense against a long and complex Travel & Expense Policy. This is slow, inconsistent, and prone to errors. High receipt volumes and varying limits based on location or seniority cause delays and "Spend Leakage."
 
-## Available Scripts
+## The Solution
+This project provides a **frontend demo** of an automated expense auditor:
+- Employees can upload receipts and provide the business purpose.
+- Each claim is assigned a status: Approved, Flagged, or Rejected.
+- A dashboard displays all claims with details and allows deletion.
+- Data is stored in **localStorage** for persistence (demo mode).
 
-In the project directory, you can run:
+## Tech Stack
+- **Programming Languages:** JavaScript
+- **Frontend Framework:** React.js ( Create React App)
+- **State Management:** useState, localStorage (for storing expenses)
+- **Routing:** React Router (`/upload` and `/dashboard`)
+- **Styling:** Inline CSS (simple white-background forms and status cards)
+- **Backend (optional for future extension):** FastAPI + Python
+- **OCR Tool (optional):** Tesseract OCR (for extracting receipt text)
 
-### `npm start`
+## Setup Instructions
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd expense-auditor
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. Install Frontend Dependencies
+cd frontend
+npm install
 
-### `npm test`
+3. Run Frontend
+npm start
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. Backend Setup
+cd backend
+python -m pip install fastapi uvicorn python-multipart pytesseract pillow
+uvicorn main:app --reload
 
-### `npm run build`
+Ensure Tesseract OCR is installed and added to PATH for OCR functionality if using backend OCR/audit.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+5. Open the App
+Frontend runs at: http://localhost:3000
+Dashboard available at: /dashboard
+Upload receipts at: /upload
