@@ -8,6 +8,10 @@ function Upload() {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+     if (!file ) {
+      alert("Please fill all fields before submitting!");
+      return; // Stop submission
+    }
     try {
       const formData = new FormData();
       formData.append("file", file);
