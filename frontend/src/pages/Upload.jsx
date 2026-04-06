@@ -1,60 +1,128 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReceiptForm from "../components/ReceiptForm";
 
 function Upload() {
   const [file, setFile] = useState(null);
-  const [purpose, setPurpose] = useState("");
-  const [date, setDate] = useState("");
+  const [result, setResult] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-  if (!file || !purpose || !date) {
-    alert("Fill all fields");
-    return;
-  }
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("purpose", "Food");
+      formData.append("date", "2026-04-06");
 
-  try {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("purpose", purpose);
-    formData.append("date", date);
+      const response = await fetch("http://127.0.0.1:8000/audit", {
+        method: "POST",
+        body: formData,
+      });
 
-    const res = await fetch("http://127.0.0.1:8000/audit", {
-      method: "POST",
-      body: formData
-    });
+      const data = await response.json();
 
-    const result = await res.json();
+      const existing = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    const existing = JSON.parse(localStorage.getItem("expenses")) || [];
-    const updated = [result, ...existing];
+      const newExpense = {
+        merchant: data.merchant,
+        amount: data.amount,
+        date: data.date,
+        status: data.status,
+        reason: data.reason,
+      };
 
-    localStorage.setItem("expenses", JSON.stringify(updated));
+      const updated = [newExpense, ...existing];
+      localStorage.setItem("expenses", JSON.stringify(updated));
 
-    navigate("/dashboard");
-  } catch (error) {
-    console.error(error);
-    alert("Error connecting to backend");
-  }
-};
+      setResult(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Upload Expense</h2>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <h2>Upload Receipt</h2>
 
-      <ReceiptForm
-        file={file}
-        setFile={setFile}
-        purpose={purpose}
-        setPurpose={setPurpose}
-        date={date}
-        setDate={setDate}
-      />
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files[0])}
+          style={styles.input}
+        />
 
-      <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit} style={styles.submitButton}>
+          Submit
+        </button>
+
+        {result && (
+          <div style={styles.result}>
+            <h3>Result:</h3>
+            <p><strong>Amount:</strong> {result.amount}</p>
+            <p><strong>Status:</strong> {result.status}</p>
+            <p><strong>Reason:</strong> {result.reason}</p>
+          </div>
+        )}
+
+        <button
+          onClick={() => navigate("/dashboard")}
+          style={styles.navButton}
+        >
+          Go to Dashboard
+        </button>
+      </div>
     </div>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "#f9f9f9",
+    padding: "20px",
+  },
+  card: {
+    background: "white",
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+    width: "350px",
+    textAlign: "center",
+  },
+  input: {
+    margin: "15px 0",
+    width: "100%",
+  },
+  submitButton: {
+    background: "#007bff",
+    color: "white",
+    border: "none",
+    padding: "10px",
+    width: "100%",
+    borderRadius: "5px",
+    cursor: "pointer",
+    marginBottom: "15px",
+  },
+  navButton: {
+    background: "#28a745",
+    color: "white",
+    border: "none",
+    padding: "10px",
+    width: "100%",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  result: {
+    margin: "15px 0",
+    padding: "10px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+    textAlign: "left",
+    background: "#f8f9fa",
+  },
+};
 
 export default Upload;

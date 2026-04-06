@@ -4,48 +4,32 @@ import StatusCard from "../components/StatusCard";
 function Dashboard() {
   const [data, setData] = useState([]);
 
+  // Function to refresh the dashboard from localStorage
+  const loadExpenses = () => {
+    const stored = JSON.parse(localStorage.getItem("expenses")) || [];
+    setData(stored);
+  };
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("expenses"));
-
-    if (!stored || stored.length === 0) {
-      const dummyExpenses = [
-        {
-          merchant: "KFC",
-          amount: "$55",
-          date: "2026-03-20",
-          status: "Rejected",
-          reason: "Meal limit is $40, claim was $55"
-        },
-        {
-          merchant: "Uber",
-          amount: "$18",
-          date: "2026-03-19",
-          status: "Approved",
-          reason: "Within transport limit"
-        },
-        {
-          merchant: "Marriott Hotel",
-          amount: "$220",
-          date: "2026-03-18",
-          status: "Flagged",
-          reason: "Exceeds standard lodging rate for region"
-        }
-      ];
-
-      localStorage.setItem("expenses", JSON.stringify(dummyExpenses));
-      setData(dummyExpenses);
-    } else {
-      setData(stored);
-    }
+    loadExpenses();
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Expense Dashboard</h2>
+    <div style={{ padding: "20px", minHeight: "100vh", background: "#f9f9f9" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Expense Dashboard</h2>
 
-      {data.map((item, index) => (
-        <StatusCard key={index} item={item} />
-      ))}
+      {data.length === 0 ? (
+        <p style={{ textAlign: "center", color: "#777" }}>No expenses uploaded yet.</p>
+      ) : (
+        data.map((item, index) => (
+          <StatusCard
+            key={index}
+            item={item}
+            index={index}
+            refresh={loadExpenses} // 🔥 Pass refresh function
+          />
+        ))
+      )}
     </div>
   );
 }
